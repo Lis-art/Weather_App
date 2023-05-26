@@ -9,15 +9,22 @@
 </head>
 <body>
     <main>
-        <form onsubmit="showWeather(); return false">
-            <input type="text" id="cityInput" value="Pleace enter your city name">
-            <input type="submit" id="btn" value="search">
-        </form>
-        <section></section>
-        <figure>
-        <button onclick="changeCity()">Change city</button>
-    </figure>
+      <form onsubmit="showWeather(); return false">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="cityInput"
+            placeholder="Please enter your city name"
+          />
+          <input type="submit" value="search" />
+        </div>
+      </form>
+      <section></section>
+
+      <figure>
+        <button onclick="changeCity()">Change City</button>
+      </figure>
     </main>
-    <script type="text/javascript" src="./assets/js/main.js" ></script>
-</body>
+    <script type="text/javascript" src="./assets/js/main.js"></script>
+  </body>
 </html>

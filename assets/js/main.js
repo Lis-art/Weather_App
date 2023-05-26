@@ -19,13 +19,20 @@ const apiKey = "2732b54b60c08dad4aa20e1b6fc1aacc";
 
 const section = document.querySelector("section");
 
+const inputWrapper = document.querySelector(".input-wrapper");
+
+const button = document.querySelector("button");
+
 
 const showWeather = () => {
     
+    event.preventDefault();
+    inputWrapper.style.top = "-50rem";
+
     section.innerHTML = "";
-    
+
     const cityInput = document.querySelector("#cityInput").value;
-    console.log(cityInput);
+    console.log({cityInput});
     
 
     fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&appid=${apiKey}`)
@@ -42,106 +49,96 @@ const showWeather = () => {
             
             const city = data.name;
             const temperature = data.main.temp;
-            const celcius = Math.round(temperature - 273.15);
-            const timeZone = data.timezone;
+            const timezone = data.timezone;
             const windDeg = data.wind.deg;
             const windSpeed = data.wind.speed;
             const cloudiness = data.weather[0].description;
             const pressure = data.main.pressure;
             const humidity = data.main.humidity;
-            const geoCords = data.coord;
+            const sunrise = data.sys.sunrise;
+            let sunriseTime = new Date((sunrise + timezone) * 1000).toUTCString();
+            sunriseTime = sunriseTime.slice(-12, -7);
+            const sunset = data.sys.sunset;
+            let sunsetTime = new Date((sunset + timezone) * 1000).toUTCString();
+            sunsetTime = sunsetTime.slice(-12, -7);
+            const geocoords = data.coord;
             const date = new Date();
-            const day = date.getDay();
+            const day = date.getDate();
             const month = date.getMonth();
             const year = date.getFullYear();
             const monthName = monate[month];
-
-            const sunrise = data.sys.sunrise;
-            let sunriseTime = new Date((sunrise + timeZone)* 1000).toUTCString();
-            sunriseTime = sunriseTime.slice(-12, -7);
-            
-            const sunset = data.sys.sunset;
-            let sunsetTime = new Date((sunset + timeZone)* 1000).toUTCString();
-            sunsetTime = sunsetTime.slice(-12, -7);
-
+            const celsius = Math.round(temperature - 273.15);
             lat = lat.toFixed(2);
             lon = lon.toFixed(2);
+        
+            console.log({sunriseTime}, {sunsetTime},{timezone}, {windDeg}, {windSpeed}, {cloudiness}, {pressure}, {humidity}, {sunrise}, {sunset}, {geocoords}, {temperature}, {city}, {day}, {monthName}, {year});
 
-
-            // 
             const icon = data.weather[0].icon;
+            console.log({icon});
             const firstTwoChar = icon.slice(0, 2);
             const lastChar = icon.slice(2);
-                
-                if (lastChar == "d"){
-                    if(firstTwoChar == 01){
-                        iconSource = "./assets/img/Sun.png"
-                    } else if (firstTwoChar == 02){
-                        iconSource = "./assets/img/CloudySun.png"
-                    } else if (firstTwoChar == 03){
-                        iconSource = "./assets/img/Cloud.png"
-                    } else if (firstTwoChar == 04){
-                        iconSource = "./assets/img/DarkCloud.png"
-                    } else if (firstTwoChar == 09){
-                        iconSource = "./assets/img/RainCloud.png"
-                    } else if (firstTwoChar == 10){
-                        iconSource = "./assets/img/SunRain.png"
-                    } else if (firstTwoChar == 11){
-                        iconSource = "./assets/img/Thunderstorm.png"
-                    } else if (firstTwoChar == 13){
-                        iconSource = "./assets/img/Snow.png"
-                    } else if(firstTwoChar == 50){
-                        iconSource = "./assets/img/Wind.png"
-                    }
-                } else if (lastChar == "n"){
-                    if(firstTwoChar == 01){
-                        iconSource = "./assets/img/ClearNight.png"
-                    } else if (firstTwoChar == 02){
-                        iconSource = "./assets/img/CloudyNight.png"
-                    } else if (firstTwoChar == 03){
-                        iconSource = "./assets/img/CloudyNight.png"
-                    } else if (firstTwoChar == 04){
-                        iconSource = "./assets/img/DarkCloud.png"
-                    } else if (firstTwoChar == 09){
-                        iconSource = "./assets/img/RainCloud.png"
-                    } else if (firstTwoChar == 10){
-                        iconSource = "./assets/img/NightRain.png"
-                    } else if (firstTwoChar == 11){
-                        iconSource = "./assets/img/Thunderstorm.png"
-                    } else if (firstTwoChar == 13){
-                        iconSource = "./assets/img/Snow.png"
-                    } else if(firstTwoChar == 50){
-                        iconSource = "./assets/img/Wind.png"
-                    }
+            console.log({firstTwoChar}, {lastChar});
+
+            if (lastChar == "d"){
+                if (firstTwoChar == "01"){
+                    iconSource = "../assets/img/Sun.png";
+                } else if(firstTwoChar == "02"){
+                    iconSource = "../assets/img/CloudySun.png";
+                } else if (firstTwoChar == "03"){
+                    iconSource = "../assets/img/Clouds.png";
+                } else if (firstTwoChar == "04"){
+                    iconSource = "../assets/img/DarkCloud.png";
+                } else if (firstTwoChar == "09"){
+                    iconSource = "../assets/img/RainCloud.png";
+                } else if (firstTwoChar == "10"){
+                    iconSource = "../assets/img/SunRain.png";
+                } else if (firstTwoChar == "11"){
+                    iconSource = "../assets/img/Thunderstorm.png";
+                } else if (firstTwoChar == "13"){
+                    iconSource = "../assets/img/Snow.png";
+                } else if (firstTwoChar == "50"){
+                    iconSource = "../assets/img/Wind.png";
                 }
-                console.log({city}, {temperature}, {celcius}, {timeZone}, {windDeg}, {windSpeed}, {cloudiness}, {pressure}, {humidity}, {sunriseTime}, {sunsetTime}, {geoCords}, {day}, {monthName}, {year});
-            
-                let weatherOutput = 
-                `<h3>${city}</h3>
-                <p>${day} ${monthName}, ${year}</p>
-                <img class="big-img" src=${iconSource} alt="wind">
-                <h1>${celcius}°C</h1>
-                <p>${cloudiness}</p>
-                <article><div><img class="icon" src="./assets/img/Wind.png" alt="wind"><p>${windSpeed}m/s</p></div>
-                <div><img class="icon" src="./assets/img/Clouds.png" alt="clouds"><p>${humidity}%</p></div></article>
-                <p>Sunrise: ${sunriseTime}</p>
-                <p>Sunset: ${sunsetTime}</p>
-                <p>Pressure: ${pressure} hPa</p>
-                <p>Geocoords: [${lat}, ${lon}]</p>`;
-                section.insertAdjacentHTML("beforeend", weatherOutput);
-                section.classList.add("weather-sec");
-                
+            } else if (lastChar == "n"){
+                if (firstTwoChar == "01"){
+                    iconSource = "../assets/img/ClearNight.png";
+                } else if(firstTwoChar == "02"){
+                    iconSource = "../assets/img/CloudyNight.png";
+                } else if (firstTwoChar == "03"){
+                    iconSource = "../assets/img/CloudyNight.png";
+                } else if (firstTwoChar == "04"){
+                    iconSource = "../assets/img/DarkCloud.png";
+                } else if (firstTwoChar == "09"){
+                    iconSource = "../assets/img/RainCloud.png";
+                } else if (firstTwoChar == "10"){
+                    iconSource = "../assets/img/NightRain.png";
+                } else if (firstTwoChar == "11"){
+                    iconSource = "../assets/img/Thunderstorm.png";
+                } else if (firstTwoChar == "13"){
+                    iconSource = "../assets/img/Snow.png";
+                } else if (firstTwoChar == "50"){
+                    iconSource = "../assets/img/Wind.png";
+                }
+            }
+
+            const weatherOutput = `<h3>${city}</h3><p>${day} ${monthName}, ${year}</p><img class="big-img" src=${iconSource}><h1>${celsius}°</h1><p>${cloudiness}</p><article><div class="icon-wrapper"><img class="icon" src="../assets/img/Wind.png"><p>${windSpeed}m/s</p></div><div class="icon-wrapper"><img class="icon" src="../assets/img/Clouds.png"><p>${humidity}%</p></div></article><p>Sunrise: ${sunriseTime}</p><p>Sunset: ${sunsetTime}</p><p>Pressure: ${pressure} hPa</p><p>Geo Coords: [${lat}, ${lon}]</p>`;
+
+            section.insertAdjacentHTML("beforeend", weatherOutput);
+            section.classList.add("weather-sec");
+
         })
-        .catch((err) => console.log(`Fehler: ${err}`));
+        .catch((err) => console.log(`Fehler: ${err}`))
+        
     })
     .catch((err) => console.log(`Fehler: ${err}`));
+
 }
 
 const changeCity = () => {
-    input.wrapper.style.top = "0";
+    inputWrapper.style.top = "0";
 
     section.innerHTML = "";
 
-    section.classList.remove()
-}
+    section.classList.remove("weather-sec");
 
+}
