@@ -8,23 +8,23 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-    <main>
-      <form onsubmit="showWeather(); return false">
-        <div class="input-wrapper">
-          <input
-            type="text"
-            id="cityInput"
-            placeholder="Please enter your city name"
-          />
-          <input type="submit" value="search" />
-        </div>
-      </form>
+  <main>
+    <form onsubmit="showWeather(); return false">
+      <div class="input-wrapper">
+        <h2>Weather App</h2>
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Please enter your city name"
+        />
+        <input type="submit" value="search" />
+      </div>
+    </form>
+    <figure>
       <section></section>
-
-      <figure>
-        <button onclick="changeCity()">Change City</button>
-      </figure>
-    </main>
-    <script type="text/javascript" src="./assets/js/main.js"></script>
-  </body>
+      <button onclick="changeCity()">change city</button>
+    </figure>
+  </main>
+  <script type="text/javascript" src="./assets/js/main.js"></script>
+</body>
 </html>
